@@ -14,45 +14,47 @@ let globalStore = {}
 */
 
 // function for checking a password
+// function for checking a password
 checkPassword = async (username, plaintextPassword) => {
-    // TODO: Make sure to delete this console.log once you're done implementing the function!
-    console.log('\n Uh-oh, checkPassword is not yet implemented. 😢')
-    // Ensure global store contains the user 
-    // (this is a quick way to check if an object contains a key)
+    // Ensure global store contains the user
     if (globalStore[username]) {
-        // TODO: Use bcrypt's compare methof to compare a plaintext password to a password hash
+        // Use bcrypt's compare method to compare a plaintext password to a password hash
+        const result = await bcrypt.compare(plaintextPassword, globalStore[username]);
 
-        // TODO: The result variable is a boolean. True means the user was valid. Take action accordingly.
+        // The result variable is a boolean. True means the user was valid. Take action accordingly.
         if (result) {
-            // TODO: Display message for valid credentials
+            // Display message for valid credentials
+            console.log('\n✅ Login successful! Welcome back, ' + username + '!\n');
+        } else {
+            // Display message for invalid credentials
+            console.log('\n❌ Invalid username or password. Please try again.\n');
         }
-        else {
-            // TODO: Display message for invalid credentials
-        }
-    }
-    else {
+    } else {
         // Tell the user they can't login to a non-existent account
-        console.log('\n❌ Sorry, but this user does not exist.\n')
+        console.log('\n❌ Sorry, but this user does not exist.\n');
     }
 }
+
 
 hashPassword = async (username, password) => {
-    // TODO: Make sure to delete this console.log once you're done implementing the function!
-    console.log('\nUh-oh, hashPassword is not yet implemented. 😢')
+    // Generate the password hash using bcrypt
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // TODO: Make the password hash using bcrypt
+    // Add the user and password hash to the global store object
+    globalStore[username] = hashedPassword;
 
-    // TODO: Add the user and password hash to the global store object
-
-    // TODO: Print a status update including the username and password hash
+    // Print a status update including the username and password hash
+    console.log(`\n✅ User '${username}' has been created with a hashed password: ${hashedPassword}\n`);
 }
 
 
 
 
 
-/* 
-* CODE BELOW IS PROVIDED AND DOESN'T NEED TO BE ALTERED 
+
+/*
+* CODE BELOW IS PROVIDED AND DOESN'T NEED TO BE ALTERED
 */
 
 createUser = async () => {
